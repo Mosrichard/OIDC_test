@@ -6,17 +6,34 @@ on:
       - main
 
 jobs:
-   aws-connection:
+  terraform-deploy:
     runs-on: ubuntu-latest
     permissions:
-        id-token: write
-        contents: read
+      id-token: write
+      contents: read
+
     steps:
-    - name: OIDC Connection
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-region: ap-south-1
-        role-to-assume: arn:aws:iam::673725944222:role/github-actions-role
-    - name: Successfully Login
-      run:
-        echo "Hola"
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configure AWS credentials using OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::673725944222:role/github-actions-role
+          aws-region: ap-south-1
+
+      # 3. Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 4. Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
+        working-directory: .
+
+      # 5. Apply Terraform
+      - name: Terraform Apply
+        run: terraform apply --auto-approve
+        working-directory: .
