@@ -18,7 +18,4 @@ jobs:
         role-to-assume: arn:aws:iam::673725944222:role/github-actions-role
     - name: Successfully Login
       run:
-        echo "HOla"
-        
-     
-#
+        echo "Hola"
