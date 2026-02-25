@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
         id-token: write
+        contents: read
     steps:
     - name: OIDC Connection
       uses: aws-actions/configure-aws-credentials@v2
